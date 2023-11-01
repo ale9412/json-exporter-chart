@@ -4,7 +4,7 @@
 
 replicaCount: 1
 
-fqdn: other.192.168.1.210.nip.io
+fqdn: ""
 
 image:
   repository: prometheuscommunity/json-exporter
