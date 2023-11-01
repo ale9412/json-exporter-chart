@@ -1,0 +1,5 @@
+1. Get the exporter data by running these commands:
+http://{{ .Values.fqdn }}/probe?module=default&target=<target url>
+
+:module: This value is defined inside the config.yml file
+:target: This value is defined inside the config.yml file

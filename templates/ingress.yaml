@@ -1,0 +1,16 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "json-exporter.fullname" . }}
+  labels:
+    {{- include "json-exporter.labels" . | nindent 4 }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`{{ .Values.fqdn }}`) && PathPrefix(`/probe`)
+      services:
+        - name: {{ include "json-exporter.fullname" . }}
+          port: {{ .Values.service.port }}
