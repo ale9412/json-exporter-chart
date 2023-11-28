@@ -6,7 +6,7 @@ import json
 import sys
 
 # Define your JSON data
-filename = sys.argv[0]
+#filename = sys.argv[0]
 with open("data.json", "r") as data:
     json_data = data.read()
 
