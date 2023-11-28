@@ -19,11 +19,36 @@ spec:
     spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+
+      initContainers:
+        - name: reload-config
+          image: busybox:1.28
+          volumeMounts:
+          - name: modules
+            mountPath: /config.d
+          - name: config
+            mountPath: /config/
+          command:
+          - "/bin/sh"
+          - "-c"
+          - |
+            cd config.d && \
+            for filename in $(ls | grep -E ".y(a|)ml"); do \
+              if [ "$filename" == "config.yml" ]; then continue; fi; \
+              if grep -q "modules:" "$filename"; then \
+                echo "File found: $filename"
+                cat "$filename" >> /config/config.yml; \
+              fi
+            done ; \
+            sed -i 's/modules://g' /config/config.yml ; \
+            sed -i '1i\modules:' /config/config.yml ; \
+            sed -i '/^$/d' /config/config.yml;
+            echo "Created config.yml"
       containers:
         - name: {{ .Chart.Name }}
           env:
           - name: CONFIG_FILE_PATH
-            value: /config/{{ .Values.config.filename }}
+            value: /{{ .Values.config.filename }}
           command: ["sh", "-c", "/bin/json_exporter --config.file=$CONFIG_FILE_PATH" ]
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -43,8 +68,11 @@ spec:
 #              port: http
           volumeMounts:
           - name: config
-            mountPath: /config/
+            mountPath: /config.yml
+            subPath: config.yml
       volumes:
-        - name: config
+        - name: modules
           configMap:
             name: {{ include "json-exporter.fullname" . }}
+        - name: config
+          emptyDir: {}
