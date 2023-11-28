@@ -1,0 +1,41 @@
+modules:
+  blockexplorer.one:
+    metrics:
+    - help: BCH block height from blockexplorer.one
+      labels:
+        blockchain: BCH
+        network: testnet
+      name: crypto_external_blockchain_block_height
+      path: '{ .[0].height }'
+  ethplorer.io:
+    metrics:
+    - help: ETH block height from ethplorer.io
+      labels:
+        blockchain: ETH
+        network: testnet
+      name: crypto_external_blockchain_block_height
+      path: '{ .lastBlock }'
+  mempool.space:
+    metrics:
+    - help: BTC block height from mempool.space
+      labels:
+        blockchain: BTC
+        network: testnet
+      name: crypto_external_blockchain_block_height
+      path: '{$}'
+  mompool.disk:
+    metrics:
+    - help: BTC block height from mempool.space
+      labels:
+        blockchain: BTC
+        network: testnet
+      name: crypto_external_blockchain_block_height
+      path: '{$}'
+  whatsonchain.com:
+    metrics:
+    - help: BSV block height from whatsonchain.com
+      labels:
+        blockchain: BSV
+        network: testnet
+      name: crypto_external_blockchain_block_height
+      path: '{ .blocks }'
